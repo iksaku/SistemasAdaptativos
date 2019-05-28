@@ -33,28 +33,26 @@ def imprime_resultado(cadena):
 #     return resultado
 
 # Regla Automática
-def procesa_ventana(ventana):
-    try:
-        regla = int(sys.argv[2])
-    except IndexError:
+def procesa_ventana(ventana, regla=None):
+    if regla == None:
         regla = 69
     ventana_bin = int(''.join(ventana), 2)
     regla = '{0:08b}'.format(regla)[::-1]
     return regla[int(ventana_bin)]
 
 
-def recorre_cadena(cadena):
+def recorre_cadena(cadena, regla=None):
     nueva_cadena = ''
 
     for i in range(0, len(cadena)):
         n = len(cadena)
         ventana = cadena[(i + (n - 1)) % n] + cadena[i] + cadena[(i + 1) % n]
-        nueva_cadena = nueva_cadena + procesa_ventana(ventana)
+        nueva_cadena = nueva_cadena + procesa_ventana(ventana, regla)
 
     return nueva_cadena
 
 
-def correr(iteraciones):
+def correr(iteraciones, regla=None):
     cadena1 = "0000000000000000000000000000000000100000000000000000000000000000000000"
     # cadena2="0000100000"
 
@@ -63,5 +61,12 @@ def correr(iteraciones):
 
     for i in range(0, int(iteraciones)):
         imprime_resultado(cadena_actual)
-        nueva_cadena = recorre_cadena(cadena_actual)
+        nueva_cadena = recorre_cadena(cadena_actual, regla)
         cadena_actual = nueva_cadena
+
+
+def obtener_regla(input_index):
+    try:
+        return int(sys.argv[input_index])
+    except IndexError:
+        return None
